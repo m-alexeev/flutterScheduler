@@ -7,18 +7,18 @@ class MainScreen extends StatelessWidget{
   Widget build(BuildContext context) {
     return MaterialApp(
       title : "Home",
-      home : navBar(),
+      home : NavBar(),
     );
   }
 }
 
 
-class navBar extends StatefulWidget {
+class NavBar extends StatefulWidget {
   @override
-  _navBarState createState() => _navBarState();
+  _NavBarState createState() => _NavBarState();
 }
 
-class _navBarState extends State<navBar> {
+class _NavBarState extends State<NavBar> {
 
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
