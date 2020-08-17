@@ -3,10 +3,18 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
-import 'package:english_words/english_words.dart';
+import 'package:flutter_app/models/User.dart';
 import 'package:flutter_app/screens/MainScreen.dart';
 
-void main() => runApp(MyApp());
+import 'models/UserManager.dart';
+
+void main() {
+  runApp(MyApp());
+  UserManager manager = UserManager();
+  for (var i = 0 ; i < 5; i ++){
+    manager.addToList(new User("userName $i", "Fname $i" , "Lname$i" ));
+  }
+}
 
 
 class MyApp extends StatelessWidget {
