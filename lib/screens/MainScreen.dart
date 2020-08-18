@@ -1,7 +1,7 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/models/UserManager.dart';
+import 'package:flutter_app/screens/SignUp.dart';
 import 'package:flutter_app/screens/UserScreen.dart';
 
 
@@ -39,10 +39,7 @@ class _NavBarState extends State<NavBar> {
       'Index 1: Calendar',
       style: optionStyle,
     ),
-    Text(
-      'Index 2: Messenger',
-      style: optionStyle,
-    ),
+    new SignUpScreen(),
     new UserScreen(),
   ];
 
