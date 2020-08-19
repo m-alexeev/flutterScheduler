@@ -5,11 +5,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/models/User.dart';
 import 'package:flutter_app/screens/MainScreen.dart';
+import 'package:flutter_app/screens/SignUp.dart';
 
 import 'models/UserManager.dart';
 
 void main() {
   runApp(MyApp());
+  //Temp user generation
   UserManager manager = UserManager();
   for (var i = 0 ; i < 5; i ++){
     manager.addToList(new User("userName $i", "Fname $i" , "Lname$i" ));
@@ -23,6 +25,9 @@ class MyApp extends StatelessWidget {
      return MaterialApp(
           title: 'Welcome to Flutter',
           home: new MainScreen(),
+       routes: <String, WidgetBuilder>{
+            "signup" : (BuildContext context) => new SignUpScreen(),
+       },
     );
   }
 }
