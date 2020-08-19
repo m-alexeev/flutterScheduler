@@ -2,8 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app/models/User.dart';
+import 'package:flutter_app/screens/LoginScreen.dart';
 import 'package:flutter_app/screens/MainScreen.dart';
 import 'package:flutter_app/screens/SignUp.dart';
 
@@ -24,9 +26,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
      return MaterialApp(
           title: 'Welcome to Flutter',
-          home: new MainScreen(),
-       routes: <String, WidgetBuilder>{
-            "signup" : (BuildContext context) => new SignUpScreen(),
+          initialRoute: '/signup',
+       routes: {
+            '/signup' : (context) => SignUpScreen(),
+            '/main' : (context) => MainScreen(),
+            '/login' : (context) => LoginScreen(),
        },
     );
   }
