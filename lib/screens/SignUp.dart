@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/AccountExists.dart';
+import 'package:flutter_app/components/form_field.dart';
+import 'package:flutter_app/components/password_text_box.dart';
 import 'package:flutter_app/components/rounded_text_box.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -9,6 +11,15 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
+
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose(){
+    _passwordController.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +31,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 TextFieldContainer(
-                  child: nameFormField(context),
+                  child: CustomFormField(
+                    hint: "Name"
+                  ),
                 ),
                 TextFieldContainer(
-                  child : usernameFormField(context),
+                  child : CustomFormField(
+                    hint: "Username",
+                  ),
+                ),
+                PasswordFormField(
+                    controller: _passwordController,
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 16.0),
@@ -44,31 +62,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  TextFormField nameFormField(BuildContext context) {
-    return TextFormField(
-        textInputAction: TextInputAction.done,
-        decoration: InputDecoration(hintText: "Name"),
-        validator: (value) {
-          if (value.isEmpty) {
-            return 'Please enter name';
-          }
-          return null;
-        });
-  }
-
-  TextFormField usernameFormField(BuildContext context) {
-    return TextFormField(
-      textInputAction: TextInputAction.done,
-      decoration: InputDecoration(hintText: "Username"),
-      validator: (value) {
-        if (value.isEmpty) {
-          return 'Please enter username';
-        }
-        return null;
-      },
-    );
-  }
-
 
   //Validate User Creation
   //TODO: Use BLoc
@@ -84,15 +77,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
           onPressed: () {
             if (_formKey.currentState.validate()) {
               print("Successfuly created user");
-
             }
           },
-          child: Text("Sign Up",
+          child: Text("Register",
           style: TextStyle(fontSize: 18),),
         ),
       ),
     );
   }
 }
-
 

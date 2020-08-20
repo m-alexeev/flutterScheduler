@@ -8,6 +8,7 @@ import 'package:flutter_app/models/User.dart';
 import 'package:flutter_app/screens/LoginScreen.dart';
 import 'package:flutter_app/screens/MainScreen.dart';
 import 'package:flutter_app/screens/SignUp.dart';
+import 'package:flutter_app/screens/WelcomeScreen.dart';
 
 import 'models/UserManager.dart';
 
@@ -26,8 +27,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
      return MaterialApp(
           title: 'Welcome to Flutter',
-          initialRoute: '/signup',
+          initialRoute: '/welcome',
        routes: {
+            '/welcome' : (context) => WelcomeScreen(),
             '/signup' : (context) => SignUpScreen(),
             '/home' : (context) => MainScreen(),
             '/login' : (context) => LoginScreen(),

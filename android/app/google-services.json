@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "180418125917",
+    "firebase_url": "https://flutterscheduler-638d3.firebaseio.com",
+    "project_id": "flutterscheduler-638d3",
+    "storage_bucket": "flutterscheduler-638d3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:180418125917:android:41d44bd4a39f8ee4256db4",
+        "android_client_info": {
+          "package_name": "com.flutter.scheduler"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "180418125917-f1n3qqpkvn8ko3gk7obsc5f9noe7ake0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWYxgVtPm899xFuPkOZPpcIv2X16bSLXM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "180418125917-f1n3qqpkvn8ko3gk7obsc5f9noe7ake0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
