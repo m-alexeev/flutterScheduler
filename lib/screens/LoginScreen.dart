@@ -1,14 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/AccountExists.dart';
+import 'package:flutter_app/components/password_text_box.dart';
 import 'package:flutter_app/components/rounded_text_box.dart';
 
 class LoginScreen extends StatefulWidget {
+  LoginScreen({
+    Key key,
+}): super (key: key);
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose(){
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -19,10 +33,10 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 TextFieldContainer(
-                  child: passwordFormField(context),
-                ),
-                TextFieldContainer(
                   child: usernameFormField(context),
+                ),
+                PasswordFormField(
+                  controller: _passwordController,
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 16.0),
@@ -33,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: AccountExists(
                     login: true,
                     press: () {
-                      Navigator.pushNamed(context, '/signup');
+                      Navigator.pushNamedAndRemoveUntil(context, '/signup', (r)=>false);
                     },
                   ),
                 ),
@@ -56,19 +70,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  TextFormField passwordFormField(BuildContext context) {
-    return TextFormField(
-      textInputAction: TextInputAction.done,
-      decoration: InputDecoration(hintText: "Password"),
-      validator: (value) {
-        if (value.isEmpty) {
-          return 'Please enter password';
-        }
-        return null;
-      },
-    );
-  }
-
   Container saveButton(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
@@ -80,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
           onPressed: () {
             if (_formKey.currentState.validate()) {
-              print("Logged in!");
+              Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
             }
           },
           child: Text(

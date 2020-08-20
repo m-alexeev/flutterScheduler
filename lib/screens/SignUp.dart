@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/AccountExists.dart';
 import 'package:flutter_app/components/rounded_text_box.dart';
-import 'package:flutter_app/screens/MainScreen.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -35,7 +34,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child : AccountExists(
                     login: false,
                     press: () {
-                      Navigator.pushNamed(context, '/login');
+                      Navigator.pushNamedAndRemoveUntil(context, '/login', (r)=>false);
                     },
                   ),
                 ),
