@@ -1,8 +1,14 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/screens/RegisterScreen.dart';
+import 'package:flutter_app/screens/UserScreen.dart';
+
 
 class MainScreen extends StatelessWidget{
+  final String title;
+  MainScreen({Key key, this.title}) : super(key:key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -26,7 +32,7 @@ class _NavBarState extends State<NavBar> {
 
 
   //Change for Screen
-  static const List<Widget> _widgetOptions = <Widget>[
+  final _widgetOptions = [
     Text(
       'Index 0: Home',
       style: optionStyle,
@@ -35,14 +41,8 @@ class _NavBarState extends State<NavBar> {
       'Index 1: Calendar',
       style: optionStyle,
     ),
-    Text(
-      'Index 2: Messenger',
-      style: optionStyle,
-    ),
-    Text (
-      'Index 3: Planner',
-      style: optionStyle,
-    )
+    new RegisterScreen(),
+    new UserScreen(),
   ];
 
   void _onItemTapped(int index){
