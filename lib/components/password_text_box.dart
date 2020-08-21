@@ -21,16 +21,7 @@ class PasswordFormField extends StatefulWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      width: size.width * 0.8,
-      decoration: BoxDecoration(
-        border: null,
-        color: Colors.grey,
-        borderRadius: BorderRadius.circular(29),
-      ),
-      child: TextFormField(
+      return TextFormField(
         controller: widget.controller,
         textInputAction: TextInputAction.done,
         decoration: InputDecoration(
@@ -53,7 +44,6 @@ class PasswordFormField extends StatefulWidget {
           }
           return null;
         },
-      ),
-    );
+      );
   }
 }

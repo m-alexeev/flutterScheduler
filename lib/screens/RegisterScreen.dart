@@ -1,18 +1,26 @@
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/AccountExists.dart';
-import 'package:flutter_app/components/form_field.dart';
+import 'package:flutter_app/components/custom_form_field.dart';
 import 'package:flutter_app/components/password_text_box.dart';
 import 'package:flutter_app/components/rounded_text_box.dart';
 
-class SignUpScreen extends StatefulWidget {
+class RegisterScreen extends StatefulWidget {
   @override
-  _SignUpScreenState createState() => _SignUpScreenState();
+  _RegisterScreenState createState() => _RegisterScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _passwordController = TextEditingController();
+  String errorMsg = "";
+
+  final TextEditingController _usernameController = TextEditingController(text: '');
+  final TextEditingController _emailController = TextEditingController(text: '');
+  final TextEditingController _passwordController = TextEditingController(text:'');
+  final TextEditingController _repasswordController = TextEditingController(text: '');
+
+  bool _autovalidate = true;
 
   @override
   void dispose(){
@@ -27,21 +35,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
       body: Center(
         child: Form(
           key: _formKey,
+          autovalidate: _autovalidate,
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 TextFieldContainer(
                   child: CustomFormField(
-                    hint: "Name"
+                    controller: _emailController,
+                    hint: "Email",
                   ),
                 ),
                 TextFieldContainer(
-                  child : CustomFormField(
+                    child: CustomFormField(
+                    controller: _usernameController,
                     hint: "Username",
                   ),
                 ),
-                PasswordFormField(
-                    controller: _passwordController,
+                TextFieldContainer(
+                  child: PasswordFormField(
+                      controller: _passwordController,
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 16.0),
@@ -74,9 +87,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: FlatButton(
           color: Colors.grey,
           padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-          onPressed: () {
+          onPressed: () async {
             if (_formKey.currentState.validate()) {
-              print("Successfuly created user");
+              try {
+                auth.UserCredential user = await auth.FirebaseAuth.instance.
+                createUserWithEmailAndPassword(email: _emailController.text, password: _passwordController.text);
+                if (user != null){
+                  Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+                }
+              } on auth.FirebaseAuthException catch(e){
+                print(e.code.toString());
+                errorMsg = e.code;
+                _formKey.currentState.validate();
+              }catch (e){
+                print(e.toString());
+              }
+
             }
           },
           child: Text("Register",
