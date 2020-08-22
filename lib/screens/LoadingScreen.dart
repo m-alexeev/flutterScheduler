@@ -14,7 +14,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
           title: Text("Loading"),
         ),
       ),
-
     );
   }
 }
