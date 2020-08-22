@@ -4,25 +4,22 @@ class CustomTextField extends StatelessWidget{
   final FormFieldSetter<String> onSaved;
   final Icon icon;
   final String hint;
-  final bool obscure;
   final FormFieldValidator validator;
 
   CustomTextField({
     this.icon,
     this.hint,
-    this.obscure,
     this.validator,
     this.onSaved});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 20, right: 20),
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 40),
       child: TextFormField(
         onSaved: onSaved,
         validator: validator,
         autofocus: true,
-        obscureText: obscure,
         style: TextStyle(
           fontSize: 20,
         ),
@@ -49,14 +46,9 @@ class CustomTextField extends StatelessWidget{
               child: icon,
             ),
             padding: EdgeInsets.only(left: 30,right: 10),
-          )
+          ),
         ),
       ),
     ) ;
   }
-
-
-
-
-
   }

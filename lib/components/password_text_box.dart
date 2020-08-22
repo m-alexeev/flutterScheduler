@@ -1,49 +1,79 @@
 import 'package:flutter/material.dart';
 
-class PasswordFormField extends StatefulWidget {
-  final Widget child;
+class CustomPasswordField extends StatefulWidget {
+  final FormFieldSetter<String> onSaved;
+  final Icon icon;
+  final String hint;
+  final bool obscure;
+  final FormFieldValidator validator;
   final TextEditingController controller;
 
-  const PasswordFormField({
-    Key key,
-    this.child,
-    @required this.controller,
-  })
-      : assert(controller != null),
-        super(key: key);
+  const CustomPasswordField({
+    this.icon,
+    this.hint,
+    this.obscure,
+    this.validator,
+    this.onSaved,
+    this.controller,
+  });
 
   @override
-  State<StatefulWidget> createState() => _PasswordFormFieldState();
+  State<StatefulWidget> createState() => _CustomPasswordFieldState();
 }
 
- class _PasswordFormFieldState extends State<PasswordFormField>{
+class _CustomPasswordFieldState extends State<CustomPasswordField>{
   bool _showPassword = true;
+
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-      return TextFormField(
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 40),
+      child: TextFormField(
+        onSaved: widget.onSaved,
+        validator: widget.validator,
+        autofocus: true,
+        obscureText: _showPassword,
         controller: widget.controller,
-        textInputAction: TextInputAction.done,
+        style: TextStyle(
+          fontSize: 20,
+        ),
         decoration: InputDecoration(
-            hintText: "Password",
-            suffixIcon: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _showPassword = !_showPassword;
-                });
+          hintStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          hintText: widget.hint,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30),
+            borderSide: BorderSide(
+              color: Theme.of(context).primaryColor,
+              width: 2,
+            ),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30),
+            borderSide: BorderSide(
+              color: Theme.of(context).primaryColor,
+              width: 3,
+            ),
+          ),
+          prefixIcon: Padding(
+            child: IconTheme(
+              data: IconThemeData(color: Theme.of(context).primaryColor),
+              child: widget.icon,
+            ),
+            padding: EdgeInsets.only(left: 30,right: 10),
+          ),
+          suffixIcon: GestureDetector(
+            onTap: (){
+              setState(() {
+                _showPassword = !_showPassword;
+
+              });
             },
             child: Icon(
               _showPassword ? Icons.visibility : Icons.visibility_off,
             ),
           ),
         ),
-        obscureText: _showPassword,
-        validator: (value) {
-          if (value.isEmpty) {
-            return 'Please enter password';
-          }
-          return null;
-        },
-      );
+      ),
+    ) ;
   }
 }

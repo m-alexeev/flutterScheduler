@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/AccountExists.dart';
+import 'package:flutter_app/components/entry_form_field.dart';
 import 'package:flutter_app/components/password_text_box.dart';
 import 'package:flutter_app/components/rounded_text_box.dart';
 
@@ -15,7 +16,10 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
 
+
   final TextEditingController _passwordController = TextEditingController();
+  String _pwd = '';
+
 
   @override
   void dispose(){
@@ -25,6 +29,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return new Scaffold(
       body: Center(
         child: Form(
@@ -32,11 +38,18 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                TextFieldContainer(
-                  child: usernameFormField(context),
+                CustomTextField(
+                  onSaved: (input) => _pwd = input,
+                  validator: (input) =>input.isEmpty? "*Required" : null,
+                  icon: Icon(Icons.lock),
+                  hint: "Email",
                 ),
-                PasswordFormField(
-                  controller: _passwordController,
+                CustomPasswordField(
+                  onSaved: (input) => _pwd = input,
+                  validator: (input) =>input.isEmpty? "*Required" : null,
+                  icon: Icon(Icons.lock),
+                  hint: "Password",
+                  obscure: true,
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 16.0),

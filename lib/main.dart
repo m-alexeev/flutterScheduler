@@ -5,22 +5,17 @@
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/models/User.dart';
 import 'package:flutter_app/screens/LoadingScreen.dart';
 import 'package:flutter_app/screens/LoginScreen.dart';
 import 'package:flutter_app/screens/MainScreen.dart';
 import 'package:flutter_app/screens/RegisterScreen.dart';
 import 'package:flutter_app/screens/WelcomeScreen.dart';
 
-import 'models/UserManager.dart';
 
 void main() {
   runApp(MyApp());
   //Temp user generation
-  UserManager manager = UserManager();
-  for (var i = 0 ; i < 5; i ++){
-    manager.addToList(new User("userName $i", "Fname $i" , "Lname$i" ));
-  }
+
 }
 
 
