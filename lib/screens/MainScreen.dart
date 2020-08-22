@@ -1,7 +1,7 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/screens/RegisterScreen.dart';
+import 'file:///E:/FlutterProjects/flutter_app/lib/screens/auth/RegisterScreen.dart';
 import 'package:flutter_app/screens/UserScreen.dart';
 
 

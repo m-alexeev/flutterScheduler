@@ -2,12 +2,11 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/AccountExists.dart';
-import 'package:flutter_app/components/custom_form_field.dart';
 import 'package:flutter_app/components/entry_form_field.dart';
 import 'package:flutter_app/components/password_text_box.dart';
-import 'package:flutter_app/components/rounded_text_box.dart';
 
 class RegisterScreen extends StatefulWidget {
+
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }
@@ -138,8 +137,11 @@ void _validateRegisterInput() async {
           auth.UserCredential user = await auth.FirebaseAuth.instance.
           createUserWithEmailAndPassword(email: _email, password: _pwd);
           if (user != null) {
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/home', (route) => false);
+            auth.User user = auth.FirebaseAuth.instance.currentUser;
+            if (!user.emailVerified){
+              await user.sendEmailVerification();
+              Navigator.pushNamed(context, '/verify-email');
+            }
           }
         } catch (error) {
           errorMsg = error.toString();
@@ -165,41 +167,5 @@ void _validateRegisterInput() async {
 }
 
 
-
-//  //Validate User Creation
-//  //TODO: Use BLoc
-//  Container saveButton(BuildContext context) {
-//    Size size = MediaQuery.of(context).size;
-//    return Container(
-//      width: size.width * 0.6 ,
-//      child: ClipRRect(
-//        borderRadius: BorderRadius.circular(29),
-//        child: FlatButton(
-//          color: Colors.grey,
-//          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-//          onPressed: () async {
-//            if (_formKey.currentState.validate()) {
-//              try {
-//                auth.UserCredential user = await auth.FirebaseAuth.instance.
-//                createUserWithEmailAndPassword(email: _emailController.text, password: _passwordController.text);
-//                if (user != null){
-//                  Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
-//                }
-//              } on auth.FirebaseAuthException catch(e){
-//                print(e.code.toString());
-//                errorMsg = e.code;
-//                _formKey.currentState.validate();
-//              }catch (e){
-//                print(e.toString());
-//              }
-//
-//            }
-//          },
-//          child: Text("Register",
-//          style: TextStyle(fontSize: 18),),
-//        ),
-//      ),
-//    );
-//  }
 }
 
