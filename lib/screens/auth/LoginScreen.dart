@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/AccountExists.dart';
 import 'package:flutter_app/components/entry_form_field.dart';
 import 'package:flutter_app/components/password_text_box.dart';
-import 'package:flutter_app/components/rounded_text_box.dart';
+import 'package:flutter_app/screens/auth/RegisterScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({
@@ -16,10 +18,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
 
-
   final TextEditingController _passwordController = TextEditingController();
   String _pwd = '';
-
+  String _email = '';
 
   @override
   void dispose(){
@@ -30,7 +31,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
 
-
     return new Scaffold(
       body: Center(
         child: Form(
@@ -39,9 +39,9 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 CustomTextField(
-                  onSaved: (input) => _pwd = input,
+                  onSaved: (input) => _email = input,
                   validator: (input) =>input.isEmpty? "*Required" : null,
-                  icon: Icon(Icons.lock),
+                  icon: Icon(Icons.email),
                   hint: "Email",
                 ),
                 CustomPasswordField(
@@ -53,14 +53,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 16.0),
-                  child: saveButton(context),
+                  child: loginButton("Login",Colors.white,Theme.of(context).primaryColor,
+                      Theme.of(context).primaryColor,Colors.white,_validateLoginInput
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 8),
                   child: AccountExists(
                     login: true,
                     press: () {
-                      Navigator.pushNamedAndRemoveUntil(context, '/signup', (r)=>false);
+                      Navigator.pushNamed(context, '/login');
                     },
                   ),
                 ),
@@ -70,39 +72,59 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  TextFormField usernameFormField(BuildContext context) {
-    return TextFormField(
-      textInputAction: TextInputAction.done,
-      decoration: InputDecoration(hintText: "Username"),
-      validator: (value) {
-        if (value.isEmpty) {
-          return 'Please enter username';
-        }
-        return null;
-      },
-    );
-  }
-
-  Container saveButton(BuildContext context) {
+  Widget loginButton(String text, Color splashColor, Color highlightColor,
+      Color fillColor, Color textColor, void validate()){
     Size size = MediaQuery.of(context).size;
+
     return Container(
-      width: size.width * 0.6,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(29),
-        child: FlatButton(
-          color: Colors.grey,
-          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-          onPressed: () {
-            if (_formKey.currentState.validate()) {
-              Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
-            }
-          },
-          child: Text(
-            "Login",
-            style: TextStyle(fontSize: 18),
+      width: size.width * 0.6 ,
+      height: 50,
+      child: FlatButton(
+        splashColor: splashColor,
+        highlightColor: highlightColor,
+        color: fillColor,
+        shape: RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(20)
+        ),
+        child: Text(
+          text,
+          style: TextStyle(
+              fontWeight: FontWeight.bold,color: textColor,fontSize: 20
           ),
         ),
+        onPressed: (){
+          validate();
+        },
       ),
     );
   }
-}
+
+
+  void _validateLoginInput() async {
+    final FormState form = _formKey.currentState;
+    if (_formKey.currentState.validate()){
+      form.save();
+        try {
+          auth.UserCredential user = await auth.FirebaseAuth.instance.
+          signInWithEmailAndPassword(email: _email, password: _pwd);
+
+          auth.FirebaseAuth.instance
+              .authStateChanges()
+              .listen((User user) {
+            if (user == null) {
+              print('User is currently signed out!');
+            } else {
+              print('User is signed in!');
+              Navigator.pushNamed(this.context, '/home');
+            }
+          });
+        } catch (error) {
+          print(error.toString());
+
+        }
+      }
+      else{
+        print("passwords dont match");
+      }
+    }
+  }

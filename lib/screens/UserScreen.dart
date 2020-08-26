@@ -1,5 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
-import 'package:flutter_app/models/User.dart';
 import 'package:flutter_app/models/UserManager.dart';
 
 class UserScreen extends StatefulWidget {
@@ -8,6 +8,8 @@ class UserScreen extends StatefulWidget {
 }
 
 class _UserScreenState extends State<UserScreen> {
+
+
   @override
   Widget build(BuildContext context) {
     UserManager manager = UserManager();
@@ -16,30 +18,19 @@ class _UserScreenState extends State<UserScreen> {
         title: Text('User Screen'),
       ),
       body: Container(
-        child: new Builder(
-        builder: (context){
-          return new ListView.builder(
-              itemBuilder: (BuildContext context, int index){
-                User user = manager.getUser(index);
-                TextStyle widgetStyle =  new TextStyle(
-                  fontWeight: FontWeight.bold, fontSize: 24
-                );
-                return new Card(
-                  child: new Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      new Text("Name: " + user.fName,style: widgetStyle,),
-                      new Text("Last Name: "+ user.lName, style: widgetStyle,),
-                      new Text("User Name: "+ user.userName, style: widgetStyle,),
-                      new Text("Last ID: "+ user.userID, style: widgetStyle,),
-                    ],
-                  ),
-                );
-              },
-            itemCount: manager.getNumUsers(),
-          );
-        }
-
+        child: FlatButton(
+          child: Text("Sign Out"),
+          onPressed: (){
+              auth.FirebaseAuth.instance
+                  .authStateChanges()
+                  .listen((auth.User user) {
+                    if (user != null){
+                        auth.FirebaseAuth.instance.signOut();
+                        //Navigator.pushNamedAndRemoveUntil(context,  '/login', (route) => false);
+                      Navigator.pop(context);
+                    }
+              });
+          }
         ),
       ),
       );

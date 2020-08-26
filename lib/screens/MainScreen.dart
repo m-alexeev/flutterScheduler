@@ -11,9 +11,8 @@ class MainScreen extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title : "Home",
-      home : NavBar(),
+    return Scaffold(
+      body : NavBar(),
     );
   }
 }

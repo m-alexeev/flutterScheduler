@@ -82,7 +82,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 16.0),
-                  child: saveButton("REGISTER",Colors.white,Theme.of(context).primaryColor,
+                  child: registerButton("REGISTER",Colors.white,Theme.of(context).primaryColor,
                     Theme.of(context).primaryColor,Colors.white,_validateRegisterInput),
                 ),
                 Padding(
@@ -100,7 +100,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-Widget saveButton(String text, Color splashColor, Color highlightColor,
+Widget registerButton(String text, Color splashColor, Color highlightColor,
         Color fillColor, Color textColor, void validate()){
   Size size = MediaQuery.of(context).size;
 

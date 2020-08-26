@@ -34,13 +34,13 @@ class MyApp extends StatelessWidget {
           return LoadingScreen();
         }
         if (snapshot.connectionState == ConnectionState.done){
-          FirebaseAuth.instance
-              .authStateChanges()
-              .listen((User user) {
-            if (user != null) {
-                initialRoute = '/home';
-            }
-          });
+//          FirebaseAuth.instance
+//              .authStateChanges()
+//              .listen((User user) {
+//            if (user != null) {
+//                initialRoute = '/home';
+//            }
+//          });
 
           return MaterialApp(
             title: 'Welcome to Flutter',
