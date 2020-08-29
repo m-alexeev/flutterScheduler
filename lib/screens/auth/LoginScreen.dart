@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/components/AccountExists.dart';
 import 'package:flutter_app/components/entry_form_field.dart';
 import 'package:flutter_app/components/password_text_box.dart';
+import 'package:flutter_app/screens/UserScreen.dart';
 import 'package:flutter_app/screens/auth/RegisterScreen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -30,6 +31,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    auth.User user = auth.FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      print(user);
+    }
+
     return new Scaffold(
       body: Center(
         child: Form(
@@ -93,8 +99,8 @@ class _LoginScreenState extends State<LoginScreen> {
           style: TextStyle(
               fontWeight: FontWeight.bold, color: textColor, fontSize: 20),
         ),
-        onPressed: () async{
-         await validate();
+        onPressed: () async {
+          await validate();
         },
       ),
     );
@@ -105,17 +111,18 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_formKey.currentState.validate()) {
       form.save();
       try {
-        auth.UserCredential user = await auth.FirebaseAuth.instance
-            .signInWithEmailAndPassword(email: _email, password: _pwd);
-
-        auth.FirebaseAuth.instance.authStateChanges().listen((User user) {
+        await auth.FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: _email, password: _pwd)
+            .then((value) {
+          auth.User user = auth.FirebaseAuth.instance.currentUser;
           if (user != null) {
             print('User is signed in!');
-            Navigator.of(context).pushReplacementNamed('/user');
+            Navigator.pushReplacement(context,
+                new MaterialPageRoute(builder: (context) => new UserScreen()));
           }
         });
       } catch (error) {
-        print("err"+ error.toString());
+        print("err" + error.toString());
       }
     } else {
       print("passwords dont match");

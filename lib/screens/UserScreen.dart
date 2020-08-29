@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
-import 'package:flutter_app/models/UserManager.dart';
 import 'package:flutter_app/screens/auth/LoginScreen.dart';
 
 class UserScreen extends StatefulWidget {
@@ -11,7 +10,6 @@ class UserScreen extends StatefulWidget {
 class _UserScreenState extends State<UserScreen> {
   @override
   Widget build(BuildContext context) {
-    UserManager manager = UserManager();
     return Scaffold(
       appBar: AppBar(
         title: Text('User Screen'),
@@ -30,7 +28,8 @@ class _UserScreenState extends State<UserScreen> {
     if (user != null) {
       try {
         await auth.FirebaseAuth.instance.signOut().then((value) {
-          Navigator.popAndPushNamed(context, '/login');
+          Navigator.pushReplacement(context,
+              new MaterialPageRoute(builder: (context) => new LoginScreen()));
         });
       }
       catch(e){

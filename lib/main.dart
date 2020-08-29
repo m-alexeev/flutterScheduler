@@ -1,13 +1,11 @@
 // Copyright 2018 The Flutter team. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/screens/LoadingScreen.dart';
 import 'file:///E:/FlutterProjects/flutter_app/lib/screens/auth/LoginScreen.dart';
-import 'package:flutter_app/screens/MainScreen.dart';
 import 'package:flutter_app/screens/UserScreen.dart';
 import 'file:///E:/FlutterProjects/flutter_app/lib/screens/auth/RegisterScreen.dart';
 import 'package:flutter_app/screens/WelcomeScreen.dart';
@@ -36,6 +34,11 @@ class MyApp extends StatelessWidget {
 //                initialRoute = '/home';
 //            }
 //          });
+            auth.User user =  auth.FirebaseAuth.instance.currentUser;
+            if (user != null){
+              print(user);
+              initialRoute = '/user';
+            }
 
             return MaterialApp(
               title: 'Welcome to Flutter',
