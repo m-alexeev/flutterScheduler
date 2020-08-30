@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/screens/MessageScreen.dart';
 import 'file:///E:/FlutterProjects/flutter_app/lib/screens/auth/RegisterScreen.dart';
 import 'package:flutter_app/screens/UserScreen.dart';
 
@@ -40,7 +41,7 @@ class _NavBarState extends State<NavBar> {
       'Index 1: Calendar',
       style: optionStyle,
     ),
-    new RegisterScreen(),
+    new MessageScreen(),
     new UserScreen(),
   ];
 

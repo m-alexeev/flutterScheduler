@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/screens/LoadingScreen.dart';
+import 'package:flutter_app/screens/MainScreen.dart';
 import 'file:///E:/FlutterProjects/flutter_app/lib/screens/auth/LoginScreen.dart';
 import 'package:flutter_app/screens/UserScreen.dart';
 import 'file:///E:/FlutterProjects/flutter_app/lib/screens/auth/RegisterScreen.dart';
@@ -26,18 +27,13 @@ class MyApp extends StatelessWidget {
           if (snapshot.hasError) {
             return LoadingScreen();
           }
-          if (snapshot.connectionState == ConnectionState.done) {
-//          FirebaseAuth.instance
-//              .authStateChanges()
-//              .listen((User user) {
-//            if (user != null) {
-//                initialRoute = '/home';
-//            }
-//          });
+          if (snapshot.connectionState == ConnectionState.done){
+
+            // Check for user Auth, auto login
             auth.User user =  auth.FirebaseAuth.instance.currentUser;
             if (user != null){
               print(user);
-              initialRoute = '/user';
+              initialRoute = '/home';
             }
 
             return MaterialApp(
@@ -46,7 +42,7 @@ class MyApp extends StatelessWidget {
               routes: {
                 '/welcome': (context) => WelcomeScreen(),
                 '/signup': (context) => RegisterScreen(),
-                //'/': (context) => UserScreen(),
+                '/home': (context) => MainScreen(),
                 '/login': (context) => LoginScreen(),
                 '/loading': (context) => LoadingScreen(),
                 '/verify-email': (context) => VerifyEmailScreen(),
