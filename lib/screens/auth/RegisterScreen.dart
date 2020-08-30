@@ -147,54 +147,55 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final FormState form = _formKey.currentState;
     if (_formKey.currentState.validate()) {
       form.save();
-      if (_pwd == _repwd) {
-        CollectionReference users =
-            FirebaseFirestore.instance.collection('users');
-        users.doc(_username).get().then((doc) async {
-          //Check if username is taken
-          try {
-            if (!doc.exists) {
-              auth.UserCredential user = await auth.FirebaseAuth.instance
-                  .createUserWithEmailAndPassword(
-                      email: _email, password: _pwd);
-              //Check if email is taken
-              if (user != null) {
-                auth.User user = auth.FirebaseAuth.instance.currentUser;
-
-                User localUser = User(_username, _email);
-                users.doc(localUser.userName)
-                    .set({
-                      'username': localUser.userName,
-                      'email': localUser.email,
-                      'uid': user.uid,
-                    })
-                    .then((value) => print("User added"))
-                    .catchError((error) => print("Failed to add user $error"));
-
-                if (!user.emailVerified) {
-                  await user.sendEmailVerification();
-                  Navigator.pushNamed(context, '/verify-email');
-                }
-              }
-            } else {
-              print("Username is taken");
-            }
-          } catch (error) {
-            errorMsg = error.toString();
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    content: Container(
-                      child: Text(errorMsg),
-                    ),
-                  );
-                });
-          }
-        });
-      } else {
-        print("passwords dont match");
+      if (_pwd != _repwd) {
+        print("passwords do not match");
+        return;
       }
+      //Check if username is taken
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('users');
+      users.where('username', isEqualTo: _username).get().then((entry) async {
+        try {
+          if (entry.docs.length == 0) {
+            auth.UserCredential user = await auth.FirebaseAuth.instance
+                .createUserWithEmailAndPassword(email: _email, password: _pwd);
+            //Check if email is taken
+            if (user != null) {
+              auth.User user = auth.FirebaseAuth.instance.currentUser;
+
+              //Create Local User and add database entry
+              User localUser = User(_username, _email);
+              users.doc(localUser.userName)
+                  .set({
+                    'username': localUser.userName,
+                    'email': localUser.email,
+                    'uid': user.uid,
+                  })
+                  .then((value) => print("User added"))
+                  .catchError((error) => print("Failed to add user $error"));
+
+              //Send email Verification
+              if (!user.emailVerified) {
+                await user.sendEmailVerification();
+                Navigator.pushNamed(context, '/verify-email');
+              }
+            }
+          } else {
+            print("Username is taken");
+          }
+        } catch (error) {
+          errorMsg = error.toString();
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  content: Container(
+                    child: Text(errorMsg),
+                  ),
+                );
+              });
+        }
+      });
     } else {
       setState(() {
         _autovalidate = true;

@@ -1,13 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/AccountExists.dart';
 import 'package:flutter_app/components/entry_form_field.dart';
 import 'package:flutter_app/components/password_text_box.dart';
 import 'package:flutter_app/screens/MainScreen.dart';
-import 'package:flutter_app/screens/UserScreen.dart';
-import 'package:flutter_app/screens/auth/RegisterScreen.dart';
+
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({
@@ -121,17 +119,17 @@ class _LoginScreenState extends State<LoginScreen> {
               if (user != null) {
                 //Query Database for username
                 CollectionReference users = FirebaseFirestore.instance.collection('users');
-                await users.doc(user.uid).get().then((doc){
-                    if (doc.exists) {
-                      Navigator.pushReplacement(context,
-                          new MaterialPageRoute(
-                              builder: (context) => new MainScreen()));
-                    }
-                    else{
-                      print ("User does not exist");
-                    }
+                await users.where('email', isEqualTo: user.email).get().then((value) {
+                  if (value != null){
+                    print (value.toString());
+                    Navigator.pushReplacement(context,
+                        new MaterialPageRoute(
+                            builder: (context) => new MainScreen()));
+                  }
+                  else {
+                    print("User does not exist");
+                  }
                 });
-
           }
         });
       } catch (error) {
