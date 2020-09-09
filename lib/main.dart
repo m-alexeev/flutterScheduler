@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/screens/LoadingScreen.dart';
 import 'package:flutter_app/screens/MainScreen.dart';
 import 'file:///E:/FlutterProjects/flutter_app/lib/screens/auth/LoginScreen.dart';
-import 'package:flutter_app/screens/UserScreen.dart';
+import 'package:flutter_app/screens/SettingsScreen.dart';
 import 'file:///E:/FlutterProjects/flutter_app/lib/screens/auth/RegisterScreen.dart';
 import 'package:flutter_app/screens/WelcomeScreen.dart';
 import 'package:flutter_app/screens/auth/VerifyEmailScreen.dart';

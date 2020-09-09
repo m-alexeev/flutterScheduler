@@ -152,15 +152,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
         return;
       }
       //Check if username is taken
-      CollectionReference users =
-          FirebaseFirestore.instance.collection('users');
+      CollectionReference users = FirebaseFirestore.instance.collection('users');
       users.where('username', isEqualTo: _username).get().then((entry) async {
         try {
           if (entry.docs.length == 0) {
-            auth.UserCredential user = await auth.FirebaseAuth.instance
+            auth.UserCredential userCred = await auth.FirebaseAuth.instance
                 .createUserWithEmailAndPassword(email: _email, password: _pwd);
+
+            var user = auth.FirebaseAuth.instance.currentUser;
+            user.updateProfile(
+              displayName: _username
+            );
+
             //Check if email is taken
-            if (user != null) {
+            if (userCred != null) {
               auth.User user = auth.FirebaseAuth.instance.currentUser;
 
               //Create Local User and add database entry

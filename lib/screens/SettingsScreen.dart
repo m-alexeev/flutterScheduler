@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
+import 'package:flutter_app/models/User.dart';
 import 'package:flutter_app/screens/auth/LoginScreen.dart';
 
 class UserScreen extends StatefulWidget {
@@ -8,16 +10,23 @@ class UserScreen extends StatefulWidget {
 }
 
 class _UserScreenState extends State<UserScreen> {
+
+  var user = auth.FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('User Screen'),
+        title: Text(user.displayName),
       ),
-      body: Container(
-        child: FlatButton(
-          child: Text("Sign Out"),
-          onPressed: () async =>_signOut(),
+      body: Scaffold(
+        body: Column(
+          children: [
+            FlatButton(
+              child: Text("Sign Out"),
+              onPressed: () async =>_signOut(),
+            ),
+          ],
         ),
       ),
     );

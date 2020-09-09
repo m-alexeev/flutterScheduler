@@ -1,3 +1,4 @@
+import 'package:flutter_app/models/User.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
@@ -116,12 +117,13 @@ class _LoginScreenState extends State<LoginScreen> {
             .then((value) async {
               //Redirect
               auth.User user = auth.FirebaseAuth.instance.currentUser;
+
               if (user != null) {
                 //Query Database for username
                 CollectionReference users = FirebaseFirestore.instance.collection('users');
-                await users.where('email', isEqualTo: user.email).get().then((value) {
-                  if (value != null){
-                    print (value.toString());
+                await users.where('email', isEqualTo: user.email).get().then((entry) {
+                  if (entry.size == 1){
+
                     Navigator.pushReplacement(context,
                         new MaterialPageRoute(
                             builder: (context) => new MainScreen()));
