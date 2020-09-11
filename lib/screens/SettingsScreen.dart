@@ -8,6 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/screens/auth/LoginScreen.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
+import 'package:http/http.dart' as http;
+
 
 class UserScreen extends StatefulWidget {
   @override
@@ -20,6 +23,10 @@ class _UserScreenState extends State<UserScreen> {
   final picker = ImagePicker();
   File _userImage;
 
+
+
+
+
   Future pickImageFromGallery() async {
     final imageFile = await picker.getImage(source: ImageSource.gallery);
     setState(() {
@@ -30,13 +37,32 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   String _text = "";
-  Future setDefaultImg() async {
-    var storage = FirebaseStorage.instance;
-  }
+  Future setUserImg() async {
+      var storage = FirebaseStorage.instance;
+
+      var userID = auth.FirebaseAuth.instance.currentUser.uid;
+
+
+      String url =
+        await storage.ref().child("${userID}/${userID}_img").getDownloadURL();
+        http.Response response = await http.get(url);
+
+        Directory tempDir = Directory.systemTemp;
+        String tempPath = tempDir.path;
+
+        File tempFile = new File("$tempPath+_img.png");
+        await tempFile.writeAsBytes(response.bodyBytes);
+
+        if (mounted) {
+          setState(() {
+            _userImage = tempFile;
+          });
+        }
+    }
 
   @override
   Widget build(BuildContext context) {
-    setDefaultImg();
+    setUserImg();
 
     return Scaffold(
       appBar: AppBar(
@@ -79,15 +105,24 @@ class _UserScreenState extends State<UserScreen> {
   void _uploadImage() async {
     var storage = FirebaseStorage.instance;
 
+    var user = auth.FirebaseAuth.instance.currentUser;
+    var userID = user.uid;
+    var userName = user.displayName;
+
+    String dir = path.dirname(_userImage.path);
+    String newPath = path.join(dir, "${userID}_img.png");
+    _userImage = _userImage.renameSync(newPath);
+    print(_userImage.path);
+
 
     String img = _userImage.path;
     String imgName = img
         .substring(img.lastIndexOf("/"), img.lastIndexOf("."))
         .replaceAll("/", "");
 
+
     final Directory tempDir = Directory.systemTemp;
     final byteData = await rootBundle.load(img);
-
 
     //get File from local path
     final file = File('${tempDir.path}/$imgName.png');
@@ -95,8 +130,10 @@ class _UserScreenState extends State<UserScreen> {
     await file.writeAsBytes(byteData.buffer
         .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
 
+
+
     StorageTaskSnapshot snapshot =
-        await storage.ref().child("defaults/$imgName").putFile(file).onComplete;
+        await storage.ref().child("$userID/$imgName").putFile(file).onComplete;
 
     if (snapshot.error == null) {
       //get download url
@@ -104,11 +141,13 @@ class _UserScreenState extends State<UserScreen> {
 
       //Create link in Firestore
       await FirebaseFirestore.instance
-          .collection('defaults')
-          .doc('userDefaults')
+          .collection('users')
+          .doc(userName)
+          .collection("images").doc("profileImages")
           .set({"url": downloadUrl, "profileImg": imgName});
 
       final snackBar = SnackBar(content: Text("Uploaded"));
+
       Scaffold.of(context).showSnackBar(snackBar);
     } else {
       print("Error: ${snapshot.error.toString()}");
